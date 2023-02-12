@@ -9,10 +9,12 @@ public class UserDAO {
 	
 	public UserDAO() {
 		try {
+			//1. JDBC 드라이버 로딩
+			Class.forName("com.mysql.jdbc.Driver"); 
 			String dbURL = "jdbc:mysql://localhost:3306/BBS";
 			String dbID = "root";
 			String dbPassword = "root";
-			Class.forName("com.mysql.jdbc.Driver");
+			//2. 데이터베이스 커넥션 생성
 			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -22,9 +24,12 @@ public class UserDAO {
 	public int login(String userID, String userPassword) {
 		String SQL = "SELECT userPassword from USER where userID = ?";
 		try {
+			//3. Statement 생성
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, userID);
+			//4. 쿼리 실행
 			rs = pstmt.executeQuery();
+			//5. 쿼리 실행 결과 사용
 			if(rs.next()) {
 				if(rs.getString(1).equals(userPassword)) {
 					return 1;
